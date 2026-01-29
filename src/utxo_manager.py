@@ -20,7 +20,7 @@ class UTXOManager :
     def get_balance ( self , owner : str ) -> float :
        """ Calculate total balance for an address ."""
        balance =0.0
-       for utxo in self.utxo_se.values():
+       for utxo in self.utxo_set.values():
           if utxo["owner"]==owner:
              balance +=utxo["amount"]
        return balance
@@ -40,11 +40,11 @@ class UTXOManager :
     def __str__(self):
        """Print the UTXO set"""
 
-       if not self.uyxo_set:
+       if not self.utxo_set:
            return "UTXO set is empty."
        lines=["Currect UTXO set"]
        
-       for(tx_id,index),utxo in self.utxo-set.items():
+       for(tx_id,index),utxo in self.utxo_set.items():
           lines.append(
              f"({tx_id},{index}) ->{utxo['amount']} BTC | Owner : {utxo['owner']}"
           )
