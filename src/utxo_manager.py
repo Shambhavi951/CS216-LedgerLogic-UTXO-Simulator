@@ -53,12 +53,12 @@ class UTXOManager :
          if utxo["owner"]==owner:result.append((tx_id,index,utxo["amount"]))
       return result
     
+    
     def get_all_addresses(self):
         addresses = set()
 
-        for txid, outputs in self.utxos.items():
-            for index, (owner, amount) in outputs.items():
-                addresses.add(owner)
+        for utxo in self.utxo_set.values():
+           addresses.add(utxo["owner"])
 
         return addresses
 
