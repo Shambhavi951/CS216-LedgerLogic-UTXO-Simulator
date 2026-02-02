@@ -1,0 +1,310 @@
+=== Bitcoin Transaction Simulator ===
+Initial UTXOs (Genesis Block):
+- Alice   : 50.0 BTC
+- Bob     : 30.0 BTC
+- Charlie : 20.0 BTC
+- David   : 10.0 BTC
+- Eve     : 5.0 BTC
+
+Main Menu:
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 5
+
+=== RUNNING ALL TEST SCENARIOS ===
+
+Validating transaction tx1
+Transaction tx1 valid (fee = 0.001000 BTC)
+
+Test 1 – Basic Valid Transaction
+--------------------------------
+
+INPUT TRANSACTION:
+  Inputs:
+    (genesis, 0) Owner: Alice
+  Outputs:
+    10 BTC → Bob
+    39.999 BTC → Alice
+
+EXPECTED RESULT:
+  ACCEPTED
+
+ACTUAL RESULT:
+  ACCEPTED
+
+FINAL RESULT:
+  PASSED
+Validating transaction tx2
+Transaction tx2 valid (fee = 10.000000 BTC)
+
+Test 2 – Multiple Inputs
+------------------------
+
+INPUT TRANSACTION:
+  Inputs:
+    (genesis, 0) Owner: Alice
+    (genesis, 2) Owner: Charlie
+  Outputs:
+    60 BTC → Bob
+
+EXPECTED RESULT:
+  ACCEPTED
+
+ACTUAL RESULT:
+  ACCEPTED
+
+FINAL RESULT:
+  PASSED
+Validating transaction tx3
+Validation Failed: Duplicate input detected: (genesis, 0)
+
+Test 3 – Double Spend in Same Transaction
+-----------------------------------------
+
+INPUT TRANSACTION:
+  Inputs:
+    (genesis, 0) Owner: Alice
+    (genesis, 0) Owner: Alice
+  Outputs:
+    10 BTC → Bob
+
+EXPECTED RESULT:
+  REJECTED
+
+ACTUAL RESULT:
+  REJECTED
+  Error message: Transaction validation failed
+
+FINAL RESULT:
+  PASSED
+Validating transaction tx4a
+Transaction tx4a valid (fee = 40.000000 BTC)
+Validating transaction tx4b
+Validation Failed: UTXO (genesis, 0) already spent in mempool
+
+Test 4 – Mempool Double Spend
+-----------------------------
+
+INPUT TRANSACTION:
+  Inputs:
+    (genesis, 0) Owner: Alice
+  Outputs:
+    10 BTC → Charlie
+
+EXPECTED RESULT:
+  REJECTED
+
+ACTUAL RESULT:
+  REJECTED
+  Error message: Transaction validation failed
+
+FINAL RESULT:
+  PASSED
+Validating transaction tx5
+Validation Failed: Insufficient funds (inputs=30.0, outputs=35)
+
+Test 5 – Insufficient Funds
+---------------------------
+
+INPUT TRANSACTION:
+  Inputs:
+    (genesis, 1) Owner: Bob
+  Outputs:
+    35 BTC → Alice
+
+EXPECTED RESULT:
+  REJECTED
+
+ACTUAL RESULT:
+  REJECTED
+  Error message: Transaction validation failed
+
+FINAL RESULT:
+  PASSED
+Validating transaction tx6
+Validation Failed: Negative output amount -5 BTC
+
+Test 6 – Negative Output
+------------------------
+
+INPUT TRANSACTION:
+  Inputs:
+    (genesis, 0) Owner: Alice
+  Outputs:
+    -5 BTC → Bob
+
+EXPECTED RESULT:
+  REJECTED
+
+ACTUAL RESULT:
+  REJECTED
+  Error message: Transaction validation failed
+
+FINAL RESULT:
+  PASSED
+Validating transaction tx7
+Transaction tx7 valid (fee = 0.000000 BTC)
+
+Test 7 – Zero Fee Transaction
+-----------------------------
+
+INPUT TRANSACTION:
+  Inputs:
+    (genesis, 4) Owner: Eve
+  Outputs:
+    5.0 BTC → Alice
+
+EXPECTED RESULT:
+  ACCEPTED
+
+ACTUAL RESULT:
+  ACCEPTED
+
+FINAL RESULT:
+  PASSED
+Validating transaction tx8_low
+Transaction tx8_low valid (fee = 0.001000 BTC)
+Validating transaction tx8_high
+Validation Failed: UTXO (genesis, 0) already spent in mempool
+
+Test 8 – Race Attack (First Seen Rule)
+--------------------------------------
+
+INPUT TRANSACTION:
+  Inputs:
+    (genesis, 0) Owner: Alice
+  Outputs:
+    40 BTC → Charlie
+
+EXPECTED RESULT:
+  REJECTED
+
+ACTUAL RESULT:
+  REJECTED
+  Error message: Transaction validation failed
+
+FINAL RESULT:
+  PASSED
+
+Test 9 – Complete Mining Flow
+
+INPUT:
+{'prev_tx': 'genesis', 'index': 3, 'owner': 'David'}
+{'amount': 9.999, 'address': 'Alice'}
+Validating transaction tx9
+Transaction tx9 valid (fee = 0.001000 BTC)
+
+Mining block...
+Block mined successfully!
+Miner Miner1 receives 0.001000 BTC
+
+
+EXPECTED: Miner should receive transaction fee
+ACTUAL: Miner balance = 0.0009999999999994458
+
+FINAL RESULT:
+  PASSED
+
+Test 10 – Fork Resolution
+Expected longest chain head:  hash_C
+Actual longest chain head:    hash_C
+
+FINAL RESULT:
+  PASSED
+
+=== ALL TESTS COMPLETED ===
+
+Main Menu:
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 1
+Enter sender: Alice
+Available balance: 50.0 BTC
+Enter recipient: Bob
+Enter amount (BTC): 20
+Enter fee: 2
+Available UTXOs:
+1.  tx_id: genesis index: 0 amt: 50.0
+Please enter -1 when done.
+Enter UTXO number: 1
+Enter UTXO number: -1
+Validating transaction tx_1770053626_5890
+Transaction tx_1770053626_5890 valid (fee = 2.000000 BTC)
+Transaction valid
+
+Fee: 2.000000 BTC
+Transaction ID: tx_1770053626_5890
+Change: 28.000000 BTC 
+
+Main Menu:
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 2
+
+ Currect UTXO set
+(genesis,0) ->50.0 BTC | Owner : Alice
+(genesis,1) ->30.0 BTC | Owner : Bob
+(genesis,2) ->20.0 BTC | Owner : Charlie
+(genesis,3) ->10.0 BTC | Owner : David
+(genesis,4) ->5.0 BTC | Owner : Eve 
+
+Main Menu:
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 3
+
+ Mempool:
+
+--- Mempool Transactions ---
+Transaction ID: tx_1770053626_5890
+  Inputs:
+    (genesis, 0) Owner: Alice
+  Outputs:
+    20.0 BTC → Bob
+
+    28.0 BTC → Alice
+
+
+Main Menu:
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 4
+Enter miner name: Alice
+
+Mining block...
+Block mined successfully!
+Miner Alice receives 2.000000 BTC
+
+
+--- Competing Chains ---
+Head: hash_B5401 | Height: 1
+Main Menu:
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 6
+Exit
+Colab paid products - Cancel contracts here
