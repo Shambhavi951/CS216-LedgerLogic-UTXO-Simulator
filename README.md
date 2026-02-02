@@ -42,8 +42,8 @@ Notes:-
 This is a local simulation with no networking or real cryptography.
 
 **TEAM MEMBERS**
-Shambhavi S Vijay 240041034 MnC\n
-Vaishnavi Ventrapragada 240002078 EE\n
-Priyanshi Mahto 240002057 EE\n
+Shambhavi S Vijay 240041034 MnC,
+Vaishnavi Ventrapragada 240002078 EE,
+Priyanshi Mahto 240002057 EE,
 Devanshi Mahto 240001023 CSE
 
