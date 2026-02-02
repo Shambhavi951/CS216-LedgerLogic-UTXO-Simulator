@@ -67,7 +67,7 @@ class UTXOManager :
 
        if not self.utxo_set:
            return "UTXO set is empty."
-       lines=["Currect UTXO set"]
+       lines=["Current UTXO set"]
 
        for(tx_id,index),utxo in self.utxo_set.items():
           lines.append(
