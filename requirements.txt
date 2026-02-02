@@ -1,0 +1,8 @@
+# Python version
+python>=3.8
+
+# Standard library modules used in the project
+# time     - for transaction ID generation and simulation timing
+# random   - for generating unique transaction identifiers
+
+# No external third-party libraries are required
