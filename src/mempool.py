@@ -17,13 +17,37 @@ class Mempool:
         Return (success, message).
         """
 
-        # Check mempool size
-        if len(self.transactions) >= self.max_size:
-            return False, "Mempool full"
-
         # Full validation
         if not tx.validation(utxo_manager, self):
             return False, "Transaction validation failed"
+
+        ok, new_fee = tx.fee_check(utxo_manager)
+        if not ok:
+            return False, "Invalid transaction fee"
+
+        # Check mempool size (WITH EVICTION)
+        if len(self.transactions) >= self.max_size:
+
+            # find lowest-fee tx in mempool
+            lowest_tx = None
+            lowest_fee = float("inf")
+
+            for old_tx in self.transactions:
+                ok, fee = old_tx.fee_check(utxo_manager)
+                if ok and fee < lowest_fee:
+                    lowest_fee = fee
+                    lowest_tx = old_tx
+
+            # reject if new tx doesn't pay more
+            if lowest_tx is None or new_fee <= lowest_fee:
+                return False, "Mempool full: fee too low"
+
+            # evict lowest-fee tx
+            for inp in lowest_tx.inputs:
+                key = (inp["prev_tx"], inp["index"])
+                self.spent_utxos.remove(key)
+
+            self.transactions.remove(lowest_tx)
 
         # Add transaction
         self.transactions.append(tx)
@@ -35,7 +59,7 @@ class Mempool:
 
         return True, "Transaction added to mempool"
 
-    
+
     def remove_transaction(self, tx_id: str):
         """
         Remove transaction (when mined).
@@ -70,6 +94,33 @@ class Mempool:
 
         # Return only transactions
         return [tx for _, tx in tx_fees[:n]]
+
+    def view_mempool(self):
+       """
+       Display all unconfirmed transactions
+       """
+       if not self.transactions:
+          print("\nMempool is empty.\n")
+          return
+       else:
+        print("\n--- Mempool Transactions ---")
+        for tx in self.transactions:
+          print(f"Transaction ID: {tx.tx_id}")
+
+        print("  Inputs:")
+        for inp in tx.inputs:
+          print(
+              f"    ({inp['prev_tx']}, {inp['index']}) "
+              f"Owner: {inp['owner']}"
+          )
+
+        print("  Outputs:")
+        for out in tx.outputs:
+            print(
+              f"    {out['amount']} BTC → {out['address']}"
+            )
+            print()
+
 
     def clear(self):
         """
