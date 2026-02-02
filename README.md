@@ -25,7 +25,7 @@ All mandatory test cases and bonus objectives specified in the assignment have b
 - Removes confirmed transactions after mining
 
 4.Mining Simulation
-- Selects transactions from the mempool
+- Selects transactions from the mempool based on fee
 - Updates the UTXO set permanently
 - Allocates collected fees to the miner
 
