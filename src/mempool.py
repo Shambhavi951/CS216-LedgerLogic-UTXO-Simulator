@@ -1,5 +1,5 @@
-from utxo_manager import UTXOManager
-from transaction import Transaction
+from transaction.py import Transaction
+from utxo_manager.py import UTXOManager
 
 class Mempool:
     def __init__(self, max_size=50):
