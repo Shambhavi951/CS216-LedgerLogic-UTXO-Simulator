@@ -1,0 +1,2 @@
+# Although validotor.py was required in repository structure , 
+# we have implementend transaction validation logic in transaction.py and mempool validation logic in mempool.py as we feel its more suitable to our project structure
